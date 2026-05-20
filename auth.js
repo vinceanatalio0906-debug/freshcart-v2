@@ -76,7 +76,10 @@ document.getElementById('authForm').addEventListener('submit', async (e) => {
         }
 
         if (isLoginMode) {
-            localStorage.setItem('currentUser', JSON.stringify(data.user));
+    localStorage.setItem('userToken', data.token); 
+    localStorage.setItem('currentUser', JSON.stringify(data.user)); 
+
+ 
 
             Swal.fire({
                 icon: 'success',
