@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Signup - TechShop</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/all.min.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: radial-gradient(circle at top right, #3d1b5d, #0f0817);
+        }
+
+        #role-selection {
+            display: flex;
+            gap: 20px;
+        }
+
+        .role-card {
+            width: 200px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .role-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent-color);
+        }
+
+        .role-card i {
+            font-size: 50px;
+            color: var(--accent-color);
+            margin-bottom: 15px;
+        }
+
+        #auth-box {
+            display: none;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--accent-color);
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 12px 12px 45px;
+            box-sizing: border-box;
+        }
+
+        .btn-full {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 15px;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .toggle-section {
+            margin-top: 20px;
+            font-size: 13px;
+            color: var(--text-dim);
+        }
+
+        #toggleLink {
+            color: var(--accent-color);
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="role-selection">
+        <div class="role-card glass-card" onclick="showAuthForm('buyer')">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <h3>BUYER</h3>
+            <p>I want to shop products.</p>
+        </div>
+        <div class="role-card glass-card" onclick="showAuthForm('seller')">
+            <i class="fa-solid fa-shop"></i>
+            <h3>SELLER</h3>
+            <p>I want to sell products.</p>
+        </div>
+    </div>
+
+    <div id="auth-box" class="glass-card">
+        <h2 id="form-title">Login</h2>
+        <form id="authForm">
+            <input type="hidden" id="selectedRole">
+
+            <div class="input-group">
+                <i class="fa-solid fa-envelope"></i>
+                <input type="email" id="email" placeholder="Email Address" required>
+            </div>
+
+            <div class="input-group">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" id="password" placeholder="Password" required>
+            </div>
+
+            <div id="sellerFields" style="display:none;">
+                <div class="input-group">
+                    <i class="fa-solid fa-store"></i>
+                    <input type="text" id="storeName" placeholder="Store Name">
+                </div>
+
+                <div class="input-group">
+                    <i class="fa-solid fa-clock"></i>
+                    <select id="sellerStatus" style="width:100%; padding:12px 12px 12px 45px; box-sizing:border-box; border-radius:6px;">
+                        <option value="active">Ready to sell now</option>
+                        <option value="upcoming">Upcoming seller</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" id="submitBtn" class="btn-primary btn-full">Login</button>
+        </form>
+
+        <div class="toggle-section">
+            <span id="toggleText">Don't have an account?</span>
+            <span id="toggleLink" onclick="toggleMode()">Sign Up</span>
+        </div>
+
+        <a href="javascript:void(0)" class="back-link" onclick="goBack()">
+            <i class="fa-solid fa-arrow-left"></i> Change Role
+        </a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="auth.js"></script>
+</body>
+</html>

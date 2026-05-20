@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreshCart</title>
+
+    <link rel="stylesheet" href="style.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body>
+
+<section id="header">
+    <div class="logo-container">
+        <i class="fa-solid fa-cart-shopping" style="color: #a531ab;"></i>
+        <span style="font-weight: 700; color: #fff;">FreshCart</span>
+    </div>
+
+    <div>
+        <ul id="navbar">
+            <li><a class="active" href="index.html">Home</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+
+            <li>
+                <a href="login.html" class="logout-btn" onclick="logoutUser(event)">
+                    Logout
+                </a>
+            </li>
+
+            <li id="lg-bag">
+                <a href="cart.html">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                </a>
+            </li>
+
+            <a href="#" id="close">
+                <i class="fa-solid fa-xmark"></i>
+            </a>
+        </ul>
+    </div>
+
+    <div id="mobile">
+        <a href="cart.html">
+            <i class="fa-solid fa-bag-shopping"></i>
+        </a>
+        <i id="bar" class="fas fa-outdent"></i>
+    </div>
+</section>
+
+
+<!-- HERO -->
+<section id="hero-text">
+    <div class="hero-content">
+        <h4>YOUR NEXT UPGRADE STARTS HERE</h4>
+
+        <h1>
+            Build Your <span class="accent">Dream Setup</span>
+            Without Breaking the Bank.
+        </h1>
+
+        <p>
+            From high-performance GPUs to silent mechanical keyboards,
+            find the perfect parts to power your passion.
+        </p>
+
+        <div class="hero-btns">
+            <button class="btn-primary" onclick="window.location.href='shop.html'">
+                SHOP NOW!
+            </button>
+        </div>
+    </div>
+</section>
+
+
+<!-- FEATURES -->
+<section id="feature" class="section-p1">
+
+    <div class="fe-box" onclick="showFeatureInfo('budget')" style="cursor:pointer;">
+        <i class="fa-solid fa-wallet"></i>
+        <h6>Budget Tracker</h6>
+    </div>
+
+    <div class="fe-box" onclick="showFeatureInfo('price')" style="cursor:pointer;">
+        <i class="fa-solid fa-tags"></i>
+        <h6>Price Alerts</h6>
+    </div>
+
+    <div class="fe-box" onclick="showFeatureInfo('stocks')" style="cursor:pointer;">
+        <i class="fa-solid fa-boxes-stacked"></i>
+        <h6>Live Stocks</h6>
+    </div>
+
+    <div class="fe-box" onclick="showFeatureInfo('sales')" style="cursor:pointer;">
+        <i class="fa-solid fa-chart-line"></i>
+        <h6>Sales Reports</h6>
+    </div>
+
+    <div class="fe-box" onclick="showFeatureInfo('secure')" style="cursor:pointer;">
+        <i class="fa-solid fa-user-shield"></i>
+        <h6>Secure Access</h6>
+    </div>
+
+</section>
+
+
+<!-- FEATURED PRODUCTS -->
+<section id="product1" class="section-p1">
+    <h2>Featured Products</h2>
+    <p>Computer Setup Collections</p>
+
+    <div class="pro-container">
+
+        <div class="pro">
+            <img src="mouse.png" alt="Basics 3-Button USB Mouse">
+
+            <div class="des">
+                <span>Mouse</span>
+                <h5>Basics 3-Button USB Mouse</h5>
+
+                <div class="star">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+
+                <h4>₱588</h4>
+            </div>
+
+            <a href="shop.html">
+                <i class="fa-solid fa-cart-shopping cart"></i>
+            </a>
+        </div>
+
+        <div class="pro">
+            <img src="keyboard.png" alt="Gaming Keyboard">
+
+            <div class="des">
+                <span>Keyboard</span>
+                <h5>onn Wired LED Gaming Keyboard, Backlit</h5>
+
+                <div class="star">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+
+                <h4>₱400</h4>
+            </div>
+
+            <a href="shop.html?category=Keyboard">
+                <i class="fa-solid fa-cart-shopping cart"></i>
+            </a>
+        </div>
+
+        <div class="pro">
+            <img src="monitor.png" alt="Dell Monitor">
+
+            <div class="des">
+                <span>Monitor</span>
+                <h5>Dell P2423D 23.8" QHD Monitor</h5>
+
+                <div class="star">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+
+                <h4>₱3,299</h4>
+            </div>
+
+            <a href="shop.html?category=Monitor">
+                <i class="fa-solid fa-cart-shopping cart"></i>
+            </a>
+        </div>
+
+        <div class="pro">
+            <img src="mousepad.png" alt="Mouse Pad">
+
+            <div class="des">
+                <span>Mouse Pad</span>
+                <h5>Logitech Studio Series Graphite Mouse Pad</h5>
+
+                <div class="star">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+
+                <h4>₱400</h4>
+            </div>
+
+            <a href="shop.html?category=Mouse Pad">
+                <i class="fa-solid fa-cart-shopping cart"></i>
+            </a>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- BANNER -->
+<section id="banner">
+    <h4>Repair Services</h4>
+    <h2>
+        Up to <span>30% Off</span> - All Peripherals & PC Parts
+    </h2>
+
+    <button onclick="window.location.href='shop.html?filter=priceDrop'">
+        Explore Deals
+    </button>
+</section>
+
+
+<!-- NEW ARRIVAL -->
+<section id="product1" class="section-p1">
+    <h2>New Arrival</h2>
+    <p>Latest Computer Setup Collections</p>
+
+    <div class="pro-container">
+
+        <div class="pro">
+            <img src="rtx5050.png" alt="RTX 5050">
+
+            <div class="des">
+                <span>GPU</span>
+                <h5>MSI GeForce RTX 5050 8G SHADOW 2X OC Graphics Card</h5>
+
+                <div class="star">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+
+                <h4>₱24,812</h4>
+            </div>
+
+            <a href="shop.html?category=GPU">
+                <i class="fa-solid fa-cart-shopping cart"></i>
+            </a>
+        </div>
+
+        <div class="pro">
+            <img src="case.png" alt="PC Case">
+
+            <div class="des">
+                <span>PC Case</span>
+                <h5>ATX Mid-Tower Case with Tempered Glass Side Panel</h5>
+
+                <div class="star">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+
+                <h4>₱5,500</h4>
+            </div>
+
+            <a href="shop.html?category=PC Case">
+                <i class="fa-solid fa-cart-shopping cart"></i>
+            </a>
+        </div>
+
+        <div class="pro">
+            <img src="keyboard.png" alt="Keyboard">
+
+            <div class="des">
+                <span>Keyboard</span>
+                <h5>Wired LED Gaming Keyboard for PC Setup</h5>
+
+                <div class="star">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+
+                <h4>₱400</h4>
+            </div>
+
+            <a href="shop.html?category=Keyboard">
+                <i class="fa-solid fa-cart-shopping cart"></i>
+            </a>
+        </div>
+
+        <div class="pro">
+            <img src="monitor.png" alt="Monitor">
+
+            <div class="des">
+                <span>Monitor</span>
+                <h5>QHD Monitor for Work, Gaming, and Productivity</h5>
+
+                <div class="star">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+
+                <h4>₱3,299</h4>
+            </div>
+
+            <a href="shop.html?category=Monitor">
+                <i class="fa-solid fa-cart-shopping cart"></i>
+            </a>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- SMALL BANNERS -->
+<section id="sm-banner" class="section-p1">
+    <div class="banner-box"
+         onclick="window.location.href='shop.html?filter=priceDrop'"
+         style="cursor:pointer;">
+
+        <h4>crazy deals</h4>
+        <h2>BUY 1 GET 1 FREE</h2>
+        <span>The best classic setup is on sale at FreshCart</span>
+
+        <button class="white"
+                onclick="event.stopPropagation(); window.location.href='about.html'">
+            Learn More
+        </button>
+    </div>
+
+    <div class="banner-box banner-box2"
+         onclick="window.location.href='shop.html'"
+         style="cursor:pointer;">
+
+        <h4>upcoming season</h4>
+        <h2>NEW HARDWARE ARRIVALS</h2>
+        <span>The best modern hardware is available at FreshCart</span>
+
+        <button class="white"
+                onclick="event.stopPropagation(); window.location.href='shop.html'">
+            Collection
+        </button>
+    </div>
+</section>
+
+
+<!-- BANNER 3 -->
+<section id="banner3">
+    <div class="banner-box"
+         onclick="window.location.href='shop.html?filter=priceDrop'"
+         style="cursor:pointer;">
+
+        <h2>SEASONAL SALE</h2>
+        <h3>Setup Collections -50% OFF</h3>
+    </div>
+
+    <div class="banner-box banner-img2"
+         onclick="window.location.href='shop.html?category=Keyboard'"
+         style="cursor:pointer;">
+
+        <h2>NEW PERIPHERALS</h2>
+        <h3>2026 Modern Hardware</h3>
+    </div>
+
+    <div class="banner-box banner-img3"
+         onclick="window.location.href='shop.html?category=GPU'"
+         style="cursor:pointer;">
+
+        <h2>GRAPHIC CARDS</h2>
+        <h3>RTX 50-Series Stocks</h3>
+    </div>
+</section>
+
+
+<!-- NEWSLETTER -->
+<section id="newsletter" class="section-p1 section-m1">
+    <div class="newstext">
+        <h4>Sign Up For Newsletters</h4>
+        <p>
+            Get E-mail updates about our latest shop and
+            <span>special offers.</span>
+        </p>
+    </div>
+
+    <div class="form">
+        <input type="text" placeholder="Your email address">
+        <button class="normal">Sign Up</button>
+    </div>
+</section>
+
+
+<!-- FOOTER -->
+<footer class="section-p1">
+    <div class="col">
+        <h2 class="logo-text">FreshCart</h2>
+
+        <h4>Contact</h4>
+        <p>
+            <strong>Address: </strong>
+            Valenzuela City, Metro Manila, Philippines
+        </p>
+
+        <p>
+            <strong>Phone: </strong>
+            +63 908 362 2113
+        </p>
+
+        <p>
+            <strong>Hours: </strong>
+            24/7 Open, Monday - Sunday
+        </p>
+
+        <div class="follow">
+            <h4>Follow Us</h4>
+
+            <div class="icon">
+                <i class="fab fa-facebook-f"></i>
+                <i class="fab fa-twitter"></i>
+                <i class="fab fa-instagram"></i>
+                <i class="fab fa-tiktok"></i>
+                <i class="fab fa-youtube"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <h4>About</h4>
+        <a href="about.html">About Us</a>
+        <a href="#">Delivery Information</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms & Conditions</a>
+        <a href="contact.html">Contact Us</a>
+    </div>
+
+    <div class="col">
+        <h4>My Account</h4>
+        <a href="login.html">Sign In</a>
+        <a href="cart.html">View Cart</a>
+        <a href="#">My Wishlist</a>
+        <a href="#">Track My Order</a>
+        <a href="#">Help</a>
+    </div>
+
+    <div class="col install">
+        <h4>Install App</h4>
+        <p>Available on App Store or Google Play</p>
+
+        <div class="row">
+            <img src="https://raw.githubusercontent.com/tech2etc/Build-and-Deploy-Ecommerce-Website/main/img/pay/app.jpg"
+                 alt="App Store">
+
+            <img src="https://raw.githubusercontent.com/tech2etc/Build-and-Deploy-Ecommerce-Website/main/img/pay/play.jpg"
+                 alt="Google Play">
+        </div>
+
+        <p>Secured Payment Gateways</p>
+
+        <img src="https://raw.githubusercontent.com/tech2etc/Build-and-Deploy-Ecommerce-Website/main/img/pay/pay.png"
+             alt="Payments">
+    </div>
+
+    <div class="copyright">
+        <p>
+            © 2026, FreshCart - Official Ecommerce Hardware Store
+        </p>
+    </div>  
+</footer>
+
+
+<script src="script.js"></script>
+</body>
+</html>

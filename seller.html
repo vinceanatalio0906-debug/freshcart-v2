@@ -1,0 +1,357 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>FreshCart - Seller Dashboard</title>
+
+        <link rel="stylesheet" href="style.css">
+
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    </head>
+
+    <body>
+
+        <!-- HEADER -->
+        <section id="header">
+
+            <div class="logo-container">
+                <i class="fa-solid fa-cart-shopping"
+                style="color: #a531ab;"></i>
+
+                <span style="
+                    font-weight: 700;
+                    color: #fff;
+                    margin-left: 10px;
+                ">
+                    FreshCart Seller
+                </span>
+            </div>
+
+            <div>
+                <ul id="navbar">
+                    <li>
+                        <a class="active" href="seller.html">
+                            Inventory Management
+                        </a>
+                    </li>
+
+                    <li>
+                     <a href="#" onclick="logoutUser()">Logout</a>
+                    </li>
+                </ul>
+            </div>
+
+        </section>
+
+
+        <!-- PAGE HEADER -->
+        <section id="page-header"
+                class="about-header"
+                style="background-image: url('img/about/banner.png');">
+
+            <h2>#seller-dashboard</h2>
+
+            <p>
+                Manage your stocks and monitor price trends!
+            </p>
+
+        </section>
+
+
+        <!-- MAIN CONTAINER -->
+        <section id="seller-container" class="section-p1">
+
+            <div style="
+                display: flex;
+                flex-wrap: wrap;
+                gap: 20px;
+                justify-content: space-between;
+            ">
+
+                <!-- ADD PRODUCT -->
+                <div id="add-product-box"
+                    style="
+                        flex: 1;
+                        min-width: 320px;
+                        background: #1a1129;
+                        padding: 30px;
+                        border-radius: 15px;
+                        border: 1px solid #a531ab;
+                        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+                    ">
+
+                    <h3 style="
+                        color: #fff;
+                        margin-bottom: 20px;
+                    ">
+                        <i class="fa-solid fa-plus-circle"
+                        style="
+                                color: #a531ab;
+                                margin-right: 10px;
+                        ">
+                        </i>
+
+                        List New Product
+                    </h3>
+
+
+                    <!-- FORM -->
+                    <form id="addProductForm"
+                        style="
+                            display: flex;
+                            flex-direction: column;
+                            gap: 15px;
+                        ">
+
+                        <!-- PRODUCT NAME -->
+                            <input type="text"
+                                id="pName"
+                                placeholder="Product Name (e.g., Gaming Mouse)"
+                                required
+                                style="
+                                        padding: 12px;
+                                        border-radius: 8px;
+                                        border: 1px solid #3d2b5d;
+                                        background: #0f0817;
+                                        color: #fff;
+                                ">
+
+
+                        <!-- CATEGORY -->
+                      <input list="categoryList"
+       id="pCategory"
+       placeholder="Select or type category"
+       required
+       style="
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #3d2b5d;
+            background: #0f0817;
+            color: #fff;
+       ">
+
+<datalist id="categoryList">
+    <option value="Mouse">
+    <option value="Keyboard">
+    <option value="Monitor">
+    <option value="GPU">
+    <option value="PC Case">
+    <option value="Mouse Pad">
+</datalist>
+
+
+                        <!-- PRICE -->
+                        <div>
+
+                            <label style="
+                                color: #909090;
+                                font-size: 12px;
+                                display: block;
+                                margin-bottom: 5px;
+                            ">
+                                Initial Price (₱)
+                            </label>
+
+                            <input type="number"
+                                id="pPrice"
+                                placeholder="Price"
+                                required
+                                style="
+                                        width: 100%;
+                                        padding: 12px;
+                                        border-radius: 8px;
+                                        border: 1px solid #3d2b5d;
+                                        background: #0f0817;
+                                        color: #fff;
+                                ">
+                        </div>
+
+                        
+
+
+                        <!-- STOCK -->
+                        <div>
+
+                            <label style="
+                                color: #909090;
+                                font-size: 12px;
+                                display: block;
+                                margin-bottom: 5px;
+                            ">
+                                Initial Stock
+                            </label>
+
+                            <input type="number"
+                                id="pStock"
+                                placeholder="Stock Quantity"
+                                required
+                                min="1"
+                                style="
+                                        width: 100%;
+                                        padding: 12px;
+                                        border-radius: 8px;
+                                        border: 1px solid #3d2b5d;
+                                        background: #0f0817;
+                                        color: #fff;
+                                ">
+                        </div>
+
+
+                        <!-- IMAGE -->
+                    <input type="file"
+                        id="pImg"
+                    accept="image/*"
+                    required
+                    style="
+                        padding: 12px;
+                    border-radius: 8px;
+                        border: 1px solid #3d2b5d;
+                        background: #0f0817;
+                        color: #fff;
+        ">
+
+
+                        <!-- NOTE -->
+                        <div style="
+                            background: #2d1b4d;
+                            padding: 12px;
+                            border-radius: 8px;
+                            border-left: 4px solid #a531ab;
+                        ">
+
+                            <p style="
+                                color: #ddd;
+                                font-size: 11px;
+                                margin: 0;
+                                line-height: 1.5;
+                            ">
+
+                                <strong>Note:</strong>
+
+                                Upload the product first.
+                                You can set the stock quantity directly
+                                in the inventory table using the purple plus icon.
+
+                            </p>
+
+                        </div>
+
+
+                        <!-- BUTTON -->
+                        <button type="submit"
+                                class="normal"
+                                style="
+                                    background: #a531ab;
+                                    color: white;
+                                    padding: 15px;
+                                    border: none;
+                                    border-radius: 8px;
+                                    font-weight: 700;
+                                    cursor: pointer;
+                                ">
+
+                            Add to Inventory
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+
+                <!-- INVENTORY -->
+                <div id="inventory-box"
+                    style="
+                        flex: 2;
+                        min-width: 500px;
+                        background: #1a1129;
+                        padding: 30px;
+                        border-radius: 15px;
+                        border: 1px solid #a531ab;
+                        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+                    ">
+
+                    <h3 style="
+                        color: #fff;
+                        margin-bottom: 20px;
+                    ">
+
+                        <i class="fa-solid fa-boxes-stacked"
+                        style="
+                                color: #a531ab;
+                                margin-right: 10px;
+                        ">
+                        </i>
+
+                        Current Inventory
+
+                    </h3>
+
+
+                    <div style="overflow-x: auto;">
+
+                        <table width="100%"
+                            style="
+                                    border-collapse: collapse;
+                                    color: #fff;
+                            ">
+
+                            <thead>
+
+                                <tr style="
+                                    text-align: left;
+                                    border-bottom: 2px solid #3d2b5d;
+                                    color: #909090;
+                                    font-size: 14px;
+                                ">
+
+                                    <th style="padding: 15px 10px;">
+                                        Image
+                                    </th>
+
+                                    <th>Product</th>
+                                    <th>Stock</th>
+                                    <th>Base Price</th>
+                                    <th>Update Selling Price</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="inventoryList">
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+                <div id="salesBox"></div>
+        </section>
+
+
+        <!-- FOOTER -->
+        <footer class="section-p1">
+
+            <div class="copyright">
+                <p>
+                    © 2026, FreshCart - Professional Seller Portal
+                </p>
+            </div>
+
+        </footer>
+
+
+        <!-- SCRIPT -->
+        <script src="script.js"></script>
+
+    </body>
+    </html>
