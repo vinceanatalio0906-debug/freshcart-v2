@@ -10,7 +10,7 @@ const defaultProducts = [
     { id: 6, name: "ATX Mid-Tower Case", price: 5500, prevPrice: 6200, img: "case.png", brand: "PC Case", stock: 8 }
 ];
 
-const API_BASE = "http://localhost:5000/api";
+const API_BASE = "https://freshcart-api-8yqt.onrender.com/api";;
 const currentSeller = JSON.parse(localStorage.getItem('currentUser'));
 
 const sellerKey = currentSeller
@@ -757,7 +757,7 @@ if (addProductForm) {
 
         try {
 
-            const uploadRes = await fetch("http://localhost:5000/api/upload", {
+            const uploadRes = await fetch("https://freshcart-api-8yqt.onrender.com/api/upload", {
                 method: "POST",
                 body: formData
             });

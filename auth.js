@@ -50,9 +50,9 @@ document.getElementById('authForm').addEventListener('submit', async (e) => {
     const storeName = document.getElementById('storeName')?.value.trim();
     const sellerStatus = document.getElementById('sellerStatus')?.value || 'active';
 
-    const endpoint = isLoginMode
-        ? "http://localhost:5000/api/auth/login"
-        : "http://localhost:5000/api/auth/signup";
+   const endpoint = isLoginMode
+  ? "https://freshcart-api-8yqt.onrender.com/api/auth/login"
+  : "https://freshcart-api-8yqt.onrender.com/api/auth/signup";
 
     try {
         const response = await fetch(endpoint, {
