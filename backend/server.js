@@ -5,7 +5,17 @@ require("dotenv").config();
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+    origin: [
+        'https://thefreshcart.shop', 
+        'https://www.thefreshcart.shop'
+    ],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+
 app.use(express.json());
 
 mongoose.connect(process.env.MONGO_URI)
