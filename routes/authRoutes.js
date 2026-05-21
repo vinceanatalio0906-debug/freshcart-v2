@@ -32,9 +32,10 @@ router.post("/signup", async (req, res) => {
             message: "Account created successfully!",
             user: newUser
         });
-    } catch (error) {
-        res.status(500).json({ message: "Server error", error });
-    }
+   } catch (error) {
+    console.error("Error sa Backend:", error); // Dito mo makikita ang totoong error sa Render Logs
+    res.status(500).json({ message: "Server error" }); // Ito lang ang ibabalik sa frontend
+}
 });
 
 router.post("/login", async (req, res) => {
@@ -51,9 +52,10 @@ router.post("/login", async (req, res) => {
             message: "Login successful!",
             user
         });
-    } catch (error) {
-        res.status(500).json({ message: "Server error", error });
-    }
+   } catch (error) {
+    console.error("Error sa Backend:", error); // Dito mo makikita ang totoong error sa Render Logs
+    res.status(500).json({ message: "Server error" }); // Ito lang ang ibabalik sa frontend
+}
 });
 
 module.exports = router;
