@@ -67,10 +67,42 @@ async function loadMarketplaceData() {
         if (currentSeller?.role === "seller") {
             sellerProducts = apiProducts.filter(p => p.sellerEmail === currentSeller.email);
         }
+
+        // --- HETO YUNG DINAGDAG NATIN SA DULO ---
+        if (currentSeller && currentSeller.email) {
+            try {
+                const remoteCart = await apiRequest(`/cart/${currentSeller.email}`);
+                if (remoteCart && remoteCart.items) {
+                    localStorage.setItem('freshCart', JSON.stringify(remoteCart.items));
+                }
+            } catch (cartErr) {
+                console.warn("Failed to sync remote cart on load:", cartErr.message);
+            }
+        }
+
     } catch (error) {
         console.warn("Using local marketplace fallback:", error.message);
     }
 }
+async function saveCartAndSync(cart) {
+    localStorage.setItem('freshCart', JSON.stringify(cart));
+    
+    // Kung may naka-login na user, ipadala agad sa backend database
+    if (currentSeller && currentSeller.email) {
+        try {
+            await apiRequest("/cart/sync", {
+                method: "POST",
+                body: JSON.stringify({
+                    userEmail: currentSeller.email,
+                    items: cart
+                })
+            });
+        } catch (error) {
+            console.error("Database cart sync failed:", error.message);
+        }
+    }
+}
+
 
 
 // ==========================================
@@ -248,7 +280,7 @@ window.searchProduct = function() {
 // ==========================================
 // 6. ADD TO CART
 // ==========================================
-window.addToCart = function(productId) {
+window.addToCart = async function(productId) {
     let cart = JSON.parse(localStorage.getItem('freshCart')) || [];
 
     const product = getAllProducts().find(p => p.id == productId);
@@ -276,7 +308,8 @@ window.addToCart = function(productId) {
         });
     }
 
-    localStorage.setItem('freshCart', JSON.stringify(cart));
+    await saveCartAndSync(cart); 
+    
     updateCartCount();
 
     Swal.fire({
@@ -349,18 +382,18 @@ function displayCart() {
     renderBudget();
 }
 
-window.removeItem = function(index) {
+window.removeItem = async function(index) {
     let cart = JSON.parse(localStorage.getItem('freshCart')) || [];
 
     cart.splice(index, 1);
 
-    localStorage.setItem('freshCart', JSON.stringify(cart));
+    await saveCartAndSync(cart);
 
     displayCart();
     updateCartCount();
 };
 
-window.updateQty = function(index, val) {
+window.updateQty = async function(index, val) {
     let cart = JSON.parse(localStorage.getItem('freshCart')) || [];
     const allProducts = getAllProducts();
 
@@ -373,13 +406,11 @@ window.updateQty = function(index, val) {
     }
 
     cart[index].quantity = quantity;
-
-    localStorage.setItem('freshCart', JSON.stringify(cart));
+    await saveCartAndSync(cart);
 
     displayCart();
     updateCartCount();
 };
-
 
 // ==========================================
 // 8. CART COUNT
@@ -499,7 +530,7 @@ window.processCheckout = async function() {
             });
         }
 
-        if (localCart.length > 0) {
+      if (localCart.length > 0) {
             let sales = JSON.parse(localStorage.getItem("sales")) || [];
 
             localCart.forEach(cartItem => {
@@ -516,7 +547,9 @@ window.processCheckout = async function() {
             localStorage.setItem("sales", JSON.stringify(sales));
         }
 
+        // --- PALITAN AT DAGDAGAN ITONG PARTE NA ITO ---
         localStorage.removeItem('freshCart');
+        await saveCartAndSync([]); // Linisin ang cart sa MongoDB database
 
         return Swal.fire('Success!', 'Order placed successfully.', 'success')
             .then(() => window.location.href = 'index.html');
