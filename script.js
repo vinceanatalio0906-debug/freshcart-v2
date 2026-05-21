@@ -60,7 +60,7 @@ async function loadMarketplaceData() {
             apiRequest("/orders")
         ]);
 
-        apiProducts = products.map(normalizeProduct);
+       apiProducts = Array.isArray(products) ? products.map(normalizeProduct) : [];
         marketplaceSellers = sellers;
         marketplaceOrders = orders;
 
