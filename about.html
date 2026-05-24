@@ -36,8 +36,8 @@
     </section>
 
     <section id="page-header" class="about-header">
-        <h2>#KnowUs</h2>
-        <p>A System Project by Valenzuela's Tech Innovators</p>
+        <h2>About FreshCart</h2>
+        <p>A marketplace system project by Valenzuela's builders</p>
     </section>
 
     <section id="about-head" class="section-p1">
@@ -45,11 +45,11 @@
         <div>
             <h2>Who We Are</h2>
             <p>
-                FreshCart is a specialized hardware e-commerce platform developed as a **System Project** by three dedicated students from **Valenzuela City**. 
-                Our mission is to provide an accessible and reliable way for gamers and general users to find the best PC components without the hassle.
+                FreshCart is a flexible e-commerce marketplace developed as a system project by three dedicated students from Valenzuela City.
+                Our mission is to provide an accessible and reliable way for buyers to discover everyday products from trusted sellers.
             </p>
             <p>
-                Driven by a passion for technology, we built this system to showcase the balance between performance and affordability. From entry-level builds to enthusiast setups, we believe everyone deserves quality hardware.
+                Driven by a passion for practical online shopping, we built this system to showcase a smoother way to browse products, compare prices, monitor stock, and support small sellers.
             </p>
 
             <div class="developer-list">
@@ -63,51 +63,34 @@
 
             <br>
             <marquee bgcolor="#a531ab" loop="-1" scrollamount="5" width="100%">
-                Built in Valenzuela — Develop By PLV Students — Quality Hardware Selection — Future of E-Commerce
+                Built in Valenzuela - Developed By PLV Students - Everyday Product Selection - Future of E-Commerce
             </marquee>
         </div>
     </section>
 
-    <section id="about-app" class="section-p1">
-        <h1>Please Try Our <a href="#">FreshCart WebSite</a></h1>
-        <p>Take your hardware shopping on the go. Available for all Android, iOS devices and Desktop.</p>
-        
-        <div class="app-banner-container">
-            <div class="app-banner-content">
-                <h2>EXPERIENCE WEBSITE E-COMMERCE</h2>
-                <p>The FreshCart WebSiteis currently in development for Valenzuela City's PLV Students.</p>
-            </div>
-        </div>
-
-        <div class="download-buttons">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="App Store">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play">
-        </div>
-    </section>
-
     <section id="feature" class="section-p1">
-        <div class="fe-box">
+        <div class="fe-box" onclick="showFeatureInfo('budget')" style="cursor:pointer;">
             <i class="fa-solid fa-wallet"></i>
             <h6>Budget Tracker</h6>
         </div>
-        <div class="fe-box">
-            <i class="fa-solid fa-tag"></i>
+
+        <div class="fe-box" onclick="showFeatureInfo('price')" style="cursor:pointer;">
+            <i class="fa-solid fa-tags"></i>
             <h6>Price Alerts</h6>
         </div>
-        <div class="fe-box">
-            <i class="fa-solid fa-location-dot"></i>
-            <h6>Nearby Sellers</h6>
-        </div>
-        <div class="fe-box">
+
+        <div class="fe-box" onclick="showFeatureInfo('stocks')" style="cursor:pointer;">
             <i class="fa-solid fa-boxes-stacked"></i>
             <h6>Live Stocks</h6>
         </div>
-        <div class="fe-box">
+
+        <div class="fe-box" onclick="showFeatureInfo('sales')" style="cursor:pointer;">
             <i class="fa-solid fa-chart-line"></i>
             <h6>Sales Reports</h6>
         </div>
-        <div class="fe-box">
-            <i class="fa-solid fa-shield-halved"></i>
+
+        <div class="fe-box" onclick="showFeatureInfo('secure')" style="cursor:pointer;">
+            <i class="fa-solid fa-user-shield"></i>
             <h6>Secure Access</h6>
         </div>
     </section>
@@ -149,39 +132,23 @@
 
     <div class="col">
         <h4>About</h4>
-        <a href="#">About Us</a>
-        <a href="#">Delivery Information</a>
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms & Conditions</a>
-        <a href="#">Contact Us</a>
+        <a href="about.html">About Us</a>
+        <a href="contact.html">Contact Us</a>
     </div>
 
     <div class="col">
         <h4>My Account</h4>
-        <a href="#">Sign In</a>
-        <a href="#">View Cart</a>
-        <a href="#">My Wishlist</a>
-        <a href="#">Track My Order</a>
-        <a href="#">Help</a>
-    </div>
-
-    <div class="col install">
-        <h4>Install App</h4>
-        <p>Available on App Store or Google Play</p>
-        <div class="row">
-            <img src="https://raw.githubusercontent.com/tech2etc/Build-and-Deploy-Ecommerce-Website/main/img/pay/app.jpg" alt="App Store">
-            <img src="https://raw.githubusercontent.com/tech2etc/Build-and-Deploy-Ecommerce-Website/main/img/pay/play.jpg" alt="Google Play">
-        </div>
-        <p>Secured Payment Gateways</p>
-        <img src="https://raw.githubusercontent.com/tech2etc/Build-and-Deploy-Ecommerce-Website/main/img/pay/pay.png" alt="Payments">
+        <a href="login.html">Sign In</a>
+        <a href="cart.html">View Cart</a>
+        <a href="contact.html">Help</a>
     </div>
 
     <div class="copyright">
-        <p>© 2026, FreshCart - Official Ecommerce Hardware Store</p>
+        <p>© 2026, FreshCart - Official Online Marketplace</p>
     </div>
 </footer>
 
-
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="script.js"></script>
 </body>
 </html>

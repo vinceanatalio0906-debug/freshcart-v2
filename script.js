@@ -2,15 +2,15 @@
 // 1. DATABASE & STORAGE
 // ==========================================
 const defaultProducts = [
-    { id: 1, name: "Basics 3-Button USB Mouse", price: 588, prevPrice: 750, img: "mouse.png", brand: "Mouse", stock: 15 },
-    { id: 2, name: "onn Wired LED Gaming Keyboard", price: 400, prevPrice: 400, img: "keyboard.png", brand: "Keyboard", stock: 10 },
-    { id: 3, name: "Dell P2423D 23.8 QHD Monitor", price: 3299, prevPrice: 3800, img: "monitor.png", brand: "Monitor", stock: 5 },
-    { id: 4, name: "Logitech Studio Mouse Pad", price: 400, prevPrice: 550, img: "mousepad.png", brand: "Mouse Pad", stock: 20 },
-    { id: 5, name: "MSI GeForce RTX 5050 8G SHADOW", price: 24812, prevPrice: 24812, img: "rtx5050.png", brand: "GPU", stock: 2 },
-    { id: 6, name: "ATX Mid-Tower Case", price: 5500, prevPrice: 6200, img: "case.png", brand: "PC Case", stock: 8 }
+    { id: 1, name: "Everyday Canvas Tote Bag", price: 588, prevPrice: 750, img: "img/shop/1.jpg", brand: "Fashion", stock: 15 },
+    { id: 2, name: "Wireless Bluetooth Earbuds", price: 400, prevPrice: 400, img: "img/shop/2.jpg", brand: "Electronics", stock: 10 },
+    { id: 3, name: "Ceramic Coffee Mug Set", price: 3299, prevPrice: 3800, img: "img/shop/3.jpg", brand: "Home", stock: 5 },
+    { id: 4, name: "Daily Comfort Running Shoes", price: 400, prevPrice: 550, img: "img/shoes/1.jpg", brand: "Sports", stock: 20 },
+    { id: 5, name: "Minimal Smart Watch", price: 24812, prevPrice: 24812, img: "img/watches/1.jpg", brand: "Electronics", stock: 2 },
+    { id: 6, name: "Reusable Self-Care Gift Set", price: 5500, prevPrice: 6200, img: "img/new/1.jpg", brand: "Beauty", stock: 8 }
 ];
 
-const API_BASE = "https://freshcart-api-8yqt.onrender.com/api";;
+const API_BASE = "http://localhost:5000/api";
 const currentSeller = JSON.parse(localStorage.getItem('currentUser'));
 
 const sellerKey = currentSeller
@@ -24,13 +24,16 @@ let marketplaceSellers = [];
 let marketplaceOrders = [];
 
 function normalizeProduct(product) {
+    const storeName = product.sellerName || product.storeName || product.sellerStoreName || product.sellerEmail || "FreshCart";
+
     return {
         ...product,
         id: product._id || product.id,
         price: Number(product.price),
         prevPrice: Number(product.prevPrice || product.price),
         stock: Number(product.stock || 0),
-        sellerName: product.sellerName || product.storeName || product.sellerEmail || "FreshCart"
+        sellerName: storeName,
+        storeName
     };
 }
 
@@ -65,7 +68,20 @@ async function loadMarketplaceData() {
         marketplaceOrders = orders;
 
         if (currentSeller?.role === "seller") {
-            sellerProducts = apiProducts.filter(p => p.sellerEmail === currentSeller.email);
+            const remoteSellerProducts = apiProducts.filter(p => p.sellerEmail === currentSeller.email);
+            const localSellerProducts = (JSON.parse(localStorage.getItem(sellerKey)) || [])
+                .map(normalizeProduct)
+                .filter(p => !p._id);
+
+            sellerProducts = [
+                ...remoteSellerProducts,
+                ...localSellerProducts.filter(localProduct =>
+                    !remoteSellerProducts.some(remoteProduct =>
+                        remoteProduct.id === localProduct.id ||
+                        (remoteProduct.name === localProduct.name && remoteProduct.img === localProduct.img)
+                    )
+                )
+            ];
         }
 
         // --- HETO YUNG DINAGDAG NATIN SA DULO ---
@@ -109,10 +125,6 @@ async function saveCartAndSync(cart) {
 // 2. GET ALL SELLER PRODUCTS
 // ==========================================
 function getAllSellerProducts() {
-    if (apiProducts.length > 0) {
-        return apiProducts;
-    }
-
     let products = [];
 
     for (let i = 0; i < localStorage.length; i++) {
@@ -124,7 +136,20 @@ function getAllSellerProducts() {
         }
     }
 
-    return products;
+    if (apiProducts.length === 0) {
+        return products;
+    }
+
+    const localOnlyProducts = products
+        .map(normalizeProduct)
+        .filter(localProduct =>
+            !apiProducts.some(apiProduct =>
+                apiProduct.id === localProduct.id ||
+                (apiProduct.name === localProduct.name && apiProduct.img === localProduct.img)
+            )
+        );
+
+    return [...apiProducts, ...localOnlyProducts];
 }
 
 function getAllProducts() {
@@ -158,6 +183,15 @@ window.chooseRole = function(role) {
         window.location.href = 'seller.html';
     }
 };
+
+function renderUserGreeting() {
+    const greeting = document.getElementById('user-greeting');
+
+    if (!greeting || !currentSeller || currentSeller.role !== 'buyer') return;
+
+    const displayName = currentSeller.name || currentSeller.email?.split('@')[0] || 'there';
+    greeting.innerText = `Hello, ${displayName}!`;
+}
 
 
 // ==========================================
@@ -220,7 +254,7 @@ function renderShop() {
                 <span>${p.brand}</span>
                 <h5>${p.name}</h5>
                 <p style="color:#b8b8b8; font-size:12px; margin:4px 0;">
-                    Seller: ${p.sellerName || p.sellerEmail || "FreshCart"}
+                    Store: ${p.storeName || p.sellerName || "FreshCart"}
                 </p>
 
                 <div class="star">
@@ -416,15 +450,28 @@ window.updateQty = async function(index, val) {
 // 8. CART COUNT
 // ==========================================
 function updateCartCount() {
-    const cartCountEl = document.getElementById('cart-count');
-
-    if (!cartCountEl) return;
-
     let cart = JSON.parse(localStorage.getItem('freshCart')) || [];
     let totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
-    cartCountEl.innerText = totalItems;
-    cartCountEl.style.display = totalItems > 0 ? "block" : "none";
+    document.querySelectorAll('a[href="cart.html"]').forEach(link => {
+        if (!link.querySelector('.fa-bag-shopping')) return;
+
+        let badge = link.querySelector('.cart-count-badge, #cart-count');
+
+        if (!badge) {
+            badge = document.createElement('span');
+            badge.className = 'cart-count-badge';
+            link.appendChild(badge);
+        }
+
+        badge.classList.add('cart-count-badge');
+        badge.innerText = totalItems;
+        badge.style.display = totalItems > 0 ? "grid" : "none";
+
+        if (getComputedStyle(link).position === "static") {
+            link.style.position = "relative";
+        }
+    });
 }
 
 
@@ -502,6 +549,9 @@ window.processCheckout = async function() {
         return Swal.fire('Over Budget!', 'Reduce items or increase limit.', 'error');
     }
 
+    window.location.href = 'checkout.html';
+    return;
+
     const checkoutChoice = await Swal.fire({
         title: 'Complete Order?',
         text: `Total: â‚±${totalSpent.toLocaleString()}`,
@@ -517,15 +567,22 @@ window.processCheckout = async function() {
         const localCart = cart.filter(item => !sellerCart.includes(item));
 
         if (sellerCart.length > 0) {
+            const orderItems = sellerCart.map(item => ({
+                productId: item._id || item.id,
+                productName: item.name,
+                sellerEmail: item.sellerEmail,
+                sellerName: item.sellerName || item.storeName || item.sellerEmail || "FreshCart Seller",
+                quantity: item.quantity,
+                price: item.price,
+                total: item.price * item.quantity
+            }));
+
             await apiRequest("/orders", {
                 method: "POST",
                 body: JSON.stringify({
                     buyerEmail: currentSeller?.email || "guest@freshcart.local",
-                    items: sellerCart.map(item => ({
-                        productId: item._id || item.id,
-                        quantity: item.quantity,
-                        name: item.name
-                    }))
+                    items: orderItems,
+                    totalAmount: orderItems.reduce((sum, item) => sum + item.total, 0)
                 })
             });
         }
@@ -606,6 +663,158 @@ window.processCheckout = async function() {
         }
     });
 };
+
+function renderDemoCheckout() {
+    const itemsContainer = document.getElementById('checkout-items');
+    const totalEl = document.getElementById('checkout-total');
+    const countEl = document.getElementById('checkout-item-count');
+    const payButton = document.getElementById('demo-pay-button');
+
+    if (!itemsContainer) return;
+
+    const cart = JSON.parse(localStorage.getItem('freshCart')) || [];
+    const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+    if (cart.length === 0) {
+        itemsContainer.innerHTML = '<p class="empty-checkout">Your cart is empty.</p>';
+        if (payButton) payButton.disabled = true;
+    } else {
+        itemsContainer.innerHTML = cart.map(item => `
+            <div class="checkout-item">
+                <img src="${item.img}" alt="${item.name}">
+                <div>
+                    <h4>${item.name}</h4>
+                    <p>${item.quantity} x &#8369;${Number(item.price).toLocaleString()}</p>
+                </div>
+                <strong>&#8369;${Number(item.price * item.quantity).toLocaleString()}</strong>
+            </div>
+        `).join('');
+    }
+
+    if (totalEl) totalEl.innerHTML = `&#8369;${total.toLocaleString()}`;
+    if (countEl) countEl.innerText = `${itemCount} item${itemCount === 1 ? '' : 's'}`;
+}
+
+async function completeDemoOrder() {
+    const cart = JSON.parse(localStorage.getItem('freshCart')) || [];
+
+    if (cart.length === 0) {
+        throw new Error('Cart is empty.');
+    }
+
+    const sellerCart = cart.filter(item => item._id || String(item.id).length === 24);
+    const localCart = cart.filter(item => !sellerCart.includes(item));
+
+    if (sellerCart.length > 0) {
+        const orderItems = sellerCart.map(item => ({
+            productId: item._id || item.id,
+            productName: item.name,
+            sellerEmail: item.sellerEmail,
+            sellerName: item.sellerName || item.storeName || item.sellerEmail || "FreshCart Seller",
+            quantity: item.quantity,
+            price: item.price,
+            total: item.price * item.quantity
+        }));
+
+        try {
+            await apiRequest("/orders", {
+                method: "POST",
+                body: JSON.stringify({
+                    buyerEmail: currentSeller?.email || "guest@freshcart.local",
+                    items: orderItems,
+                    totalAmount: orderItems.reduce((sum, item) => sum + item.total, 0)
+                })
+            });
+        } catch (error) {
+            console.warn("Demo order saved locally because API order sync failed:", error.message);
+        }
+    }
+
+    if (localCart.length > 0) {
+        let sales = JSON.parse(localStorage.getItem("sales")) || [];
+
+        localCart.forEach(cartItem => {
+            sales.push({
+                seller: cartItem.sellerEmail || "FreshCart",
+                buyer: currentSeller?.email || "Guest",
+                product: cartItem.name,
+                quantity: cartItem.quantity,
+                total: cartItem.price * cartItem.quantity,
+                date: new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            });
+
+            for (let i = 0; i < localStorage.length; i++) {
+                let key = localStorage.key(i);
+
+                if (key.startsWith('sellerProducts_')) {
+                    let items = JSON.parse(localStorage.getItem(key)) || [];
+                    let index = items.findIndex(p => p.id == cartItem.id);
+
+                    if (index !== -1) {
+                        items[index].stock -= cartItem.quantity;
+
+                        if (items[index].stock < 0) {
+                            items[index].stock = 0;
+                        }
+
+                        localStorage.setItem(key, JSON.stringify(items));
+                    }
+                }
+            }
+        });
+
+        localStorage.setItem("sales", JSON.stringify(sales));
+    }
+
+    localStorage.removeItem('freshCart');
+    await saveCartAndSync([]);
+}
+
+function setupDemoPaymentForm() {
+    const form = document.getElementById('demo-payment-form');
+    const cardNumber = document.getElementById('card-number');
+
+    if (!form) return;
+
+    if (cardNumber) {
+        cardNumber.addEventListener('input', () => {
+            const digits = cardNumber.value.replace(/\D/g, '').slice(0, 16);
+            cardNumber.value = digits.replace(/(\d{4})(?=\d)/g, '$1 ');
+        });
+    }
+
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const cleanCard = cardNumber.value.replace(/\D/g, '');
+        const expiry = document.getElementById('card-expiry').value.trim();
+        const cvv = document.getElementById('card-cvv').value.trim();
+
+        if (cleanCard.length < 12 || !/^\d{2}\/\d{2}$/.test(expiry) || !/^\d{3,4}$/.test(cvv)) {
+            return Swal.fire('Check details', 'Enter a valid card, expiry, and CVV.', 'error');
+        }
+
+        if (cleanCard === '4000000000000002') {
+            return Swal.fire('Payment declined', 'Please try another card.', 'error');
+        }
+
+        Swal.fire({
+            title: 'Processing payment...',
+            text: 'Please wait while we confirm your order.',
+            allowOutsideClick: false,
+            didOpen: () => Swal.showLoading()
+        });
+
+        try {
+            await new Promise(resolve => setTimeout(resolve, 1200));
+            await completeDemoOrder();
+            window.location.href = 'payment-success.html';
+        } catch (error) {
+            Swal.fire('Payment Failed', error.message, 'error');
+        }
+    });
+}
 
 
 // ==========================================
@@ -790,7 +999,7 @@ if (addProductForm) {
 
         try {
 
-            const uploadRes = await fetch("https://freshcart-api-8yqt.onrender.com/api/upload", {
+            const uploadRes = await fetch(`${API_BASE}/upload`, {
                 method: "POST",
                 body: formData
             });
@@ -810,7 +1019,9 @@ if (addProductForm) {
                 price: initialPrice,
                 stock: initialStock,
                 img: uploadData.imageUrl,
-                sellerEmail: currentSeller.email
+                sellerEmail: currentSeller.email,
+                sellerName: currentSeller.storeName || currentSeller.name || currentSeller.email,
+                storeName: currentSeller.storeName || currentSeller.name || currentSeller.email
             };
 
             let newP;
@@ -826,7 +1037,8 @@ if (addProductForm) {
                     ...productPayload,
                     prevPrice: initialPrice,
                     sellerEmail: currentSeller.email,
-                    sellerName: currentSeller.storeName || currentSeller.email
+                    sellerName: currentSeller.storeName || currentSeller.name || currentSeller.email,
+                    storeName: currentSeller.storeName || currentSeller.name || currentSeller.email
                 };
             }
 
@@ -879,6 +1091,16 @@ function displaySingleProduct() {
         if (details.querySelector('h2')) {
             details.querySelector('h2').innerText = `₱${product.price.toLocaleString()}`;
         }
+
+        let storeMeta = details.querySelector('.product-store-name');
+
+        if (!storeMeta) {
+            storeMeta = document.createElement('p');
+            storeMeta.className = 'product-store-name';
+            details.querySelector('h2')?.insertAdjacentElement('afterend', storeMeta);
+        }
+
+        storeMeta.innerText = `Store: ${product.storeName || product.sellerName || "FreshCart"}`;
 
         if (details.querySelector('span')) {
             details.querySelector('span').innerText = `Available Stock: ${product.stock}`;
@@ -1085,16 +1307,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderInventory();
     renderSales();
     displayCart();
+    renderDemoCheckout();
+    setupDemoPaymentForm();
     updateCartCount();
     renderBudget();
     displaySingleProduct();
     renderCategoryOptions();
     renderSellers();
     renderBestSellers();
+    renderUserGreeting();
 });
 
 window.logoutUser = function() {
     localStorage.removeItem("currentUser");
+    localStorage.removeItem("userToken");
     window.location.href = "login.html";
 };
 
@@ -1106,11 +1332,11 @@ window.showFeatureInfo = function(feature) {
         },
         price: {
             title: "Price Alerts",
-            text: "This feature shows price changes such as price drops and price increases, helping buyers find better deals."
+            text: "This feature shows price changes such as price drops and price increases, helping buyers find better deals across the marketplace."
         },
         stocks: {
             title: "Live Stocks",
-            text: "This feature displays the current available stock of each product so buyers know if an item is still available."
+            text: "This feature displays current available stock so buyers know if an item is still available."
         },
         sales: {
             title: "Sales Reports",
@@ -1176,7 +1402,7 @@ function renderBestSellers() {
             <span>${p.brand}</span>
             <h5>${p.name}</h5>
             <p style="color:#b8b8b8; font-size:12px; margin:4px 0;">
-                Seller: ${p.sellerName || p.sellerEmail || "FreshCart"}
+                Store: ${p.storeName || p.sellerName || "FreshCart"}
             </p>
             <h4>₱${p.price.toLocaleString()}</h4>
             <p style="color:#28a745; font-weight:bold;">

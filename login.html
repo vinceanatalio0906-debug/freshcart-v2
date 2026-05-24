@@ -9,11 +9,27 @@
     <style>
         body {
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
             background: radial-gradient(circle at top right, #3d1b5d, #0f0817);
+        }
+
+        .login-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 28px;
+        }
+
+        .login-logo span {
+            color: #fff;
+            font-size: 46px;
+            font-weight: 800;
+            letter-spacing: 0;
+            line-height: 1;
         }
 
         #role-selection {
@@ -92,61 +108,78 @@
 </head>
 <body>
 
-    <div id="role-selection">
-        <div class="role-card glass-card" onclick="showAuthForm('buyer')">
-            <i class="fa-solid fa-cart-shopping"></i>
-            <h3>BUYER</h3>
-            <p>I want to shop products.</p>
+    <main class="login-content">
+        <div class="login-logo">
+            <span>FreshCart</span>
         </div>
-        <div class="role-card glass-card" onclick="showAuthForm('seller')">
-            <i class="fa-solid fa-shop"></i>
-            <h3>SELLER</h3>
-            <p>I want to sell products.</p>
+
+        <div id="role-selection">
+            <div class="role-card glass-card" onclick="showAuthForm('buyer')">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <h3>BUYER</h3>
+                <p>I want to shop products.</p>
+            </div>
+            <div class="role-card glass-card" onclick="showAuthForm('seller')">
+                <i class="fa-solid fa-shop"></i>
+                <h3>SELLER</h3>
+                <p>I want to sell products.</p>
+            </div>
         </div>
-    </div>
 
-    <div id="auth-box" class="glass-card">
-        <h2 id="form-title">Login</h2>
-        <form id="authForm">
-            <input type="hidden" id="selectedRole">
+        <div id="auth-box" class="glass-card">
+            <h2 id="form-title">Login</h2>
+            <form id="authForm">
+                <input type="hidden" id="selectedRole">
 
-            <div class="input-group">
-    <i class="fa-solid fa-envelope"></i>
-    <input type="email" id="email" placeholder="Email Address" required autocomplete="off" name="email_field">
-</div>
-
-<div class="input-group">
-    <i class="fa-solid fa-lock"></i>
-    <input type="password" id="password" placeholder="Password" required autocomplete="new-password" name="password_field">
-</div>
-
-            <div id="sellerFields" style="display:none;">
                 <div class="input-group">
-                    <i class="fa-solid fa-store"></i>
-                    <input type="text" id="storeName" placeholder="Store Name">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input type="email" id="email" placeholder="Email Address" required autocomplete="off" name="email_field">
                 </div>
 
                 <div class="input-group">
-                    <i class="fa-solid fa-clock"></i>
-                    <select id="sellerStatus" style="width:100%; padding:12px 12px 12px 45px; box-sizing:border-box; border-radius:6px;">
-                        <option value="active">Ready to sell now</option>
-                        <option value="upcoming">Upcoming seller</option>
-                    </select>
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="password" placeholder="Password" required autocomplete="new-password" name="password_field">
                 </div>
+
+                <div id="buyerFields" style="display:none;">
+                    <div class="input-group">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" id="buyerName" placeholder="Your Name">
+                    </div>
+                </div>
+
+                <div id="sellerFields" style="display:none;">
+                    <div class="input-group">
+                        <i class="fa-solid fa-store"></i>
+                        <input type="text" id="storeName" placeholder="Store Name">
+                    </div>
+
+                    <div class="input-group">
+                        <i class="fa-solid fa-clock"></i>
+                        <select id="sellerStatus" style="width:100%; padding:12px 12px 12px 45px; box-sizing:border-box; border-radius:6px;">
+                            <option value="active">Ready to sell now</option>
+                            <option value="upcoming">Upcoming seller</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" id="submitBtn" class="btn-primary btn-full">Login</button>
+            </form>
+
+            <div class="toggle-section">
+                <span id="toggleText">Don't have an account?</span>
+                <span id="toggleLink" onclick="toggleMode()">Sign Up</span>
             </div>
 
-            <button type="submit" id="submitBtn" class="btn-primary btn-full">Login</button>
-        </form>
+            <a href="javascript:void(0)" class="back-link" onclick="forgotPassword()">
+                Forgot Password?
+            </a>
 
-        <div class="toggle-section">
-            <span id="toggleText">Don't have an account?</span>
-            <span id="toggleLink" onclick="toggleMode()">Sign Up</span>
+            <a href="javascript:void(0)" class="back-link" onclick="goBack()">
+                <i class="fa-solid fa-arrow-left"></i> Change Role
+            </a>
         </div>
-
-        <a href="javascript:void(0)" class="back-link" onclick="goBack()">
-            <i class="fa-solid fa-arrow-left"></i> Change Role
-        </a>
-    </div>
+    </main>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="auth.js"></script>

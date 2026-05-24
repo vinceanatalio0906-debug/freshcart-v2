@@ -27,16 +27,17 @@
             <li><a href="about.html">About</a></li>
             <li><a class="active" href="contact.html">Contact</a></li>
             <li id="lg-bag"><a href="cart.html"><i class="fa-solid fa-bag-shopping"></i></a></li>
-            <a href="#" id="close"><i class="fa-solid fa-xmark"></i></a>
+            <a href="javascript:void(0)" id="close"><i class="fa-solid fa-xmark"></i></a>
         </ul>
         <div id="mobile">
+            <a href="cart.html"><i class="fa-solid fa-bag-shopping"></i></a>
             <i id="bar" class="fas fa-outdent"></i>
         </div>
     </section>
 
   
     <section id="page-header" class="contact-header">
-        <h2>#Let'sTalk</h2>
+        <h2>Contact FreshCart</h2>
         <p>LEAVE A MESSAGE. We love to hear from you!</p>
     </section>
 
@@ -108,47 +109,22 @@
 
     <div class="col">
         <h4>About</h4>
-        <a href="#">About Us</a>
-        <a href="#">Delivery Information</a>
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms & Conditions</a>
-        <a href="#">Contact Us</a>
+        <a href="about.html">About Us</a>
+        <a href="contact.html">Contact Us</a>
     </div>
 
     <div class="col">
         <h4>My Account</h4>
-        <a href="#">Sign In</a>
-        <a href="#">View Cart</a>
-        <a href="#">My Wishlist</a>
-        <a href="#">Track My Order</a>
-        <a href="#">Help</a>
-    </div>
-
-    <div class="col install">
-        <h4>Install App</h4>
-        <p>Available on App Store or Google Play</p>
-        <div class="row">
-            <img src="https://raw.githubusercontent.com/tech2etc/Build-and-Deploy-Ecommerce-Website/main/img/pay/app.jpg" alt="App Store">
-            <img src="https://raw.githubusercontent.com/tech2etc/Build-and-Deploy-Ecommerce-Website/main/img/pay/play.jpg" alt="Google Play">
-        </div>
-        <p>Secured Payment Gateways</p>
-        <img src="https://raw.githubusercontent.com/tech2etc/Build-and-Deploy-Ecommerce-Website/main/img/pay/pay.png" alt="Payments">
+        <a href="login.html">Sign In</a>
+        <a href="cart.html">View Cart</a>
+        <a href="contact.html">Help</a>
     </div>
 
     <div class="copyright">
-        <p>© 2026, FreshCart - Official Ecommerce Hardware Store</p>
+        <p>© 2026, FreshCart - Official Online Marketplace</p>
     </div>
 </footer>
     <script>
-  
-        const bar = document.getElementById('bar');
-        const close = document.getElementById('close');
-        const nav = document.getElementById('navbar');
-
-        if (bar) { bar.addEventListener('click', () => { nav.classList.add('active'); }); }
-        if (close) { close.addEventListener('click', () => { nav.classList.remove('active'); }); }
-
-  
        const form = document.getElementById('contactForm');
 
 if (form) {
@@ -195,5 +171,6 @@ if (form) {
         ScrollReveal().reveal('.contact-box', { delay: 200, origin: 'bottom', distance: '50px' });
         ScrollReveal().reveal('.map-section-container', { delay: 400, origin: 'bottom', distance: '50px' });
     </script>
+    <script src="script.js"></script>
 </body>
 </html>

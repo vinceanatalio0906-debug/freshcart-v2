@@ -7,6 +7,10 @@ const app = express();
 
 app.use(cors({
     origin: [
+        'http://localhost:3000',
+        'http://localhost:5000',
+        'http://127.0.0.1:3000',
+        'http://127.0.0.1:5000',
         'https://thefreshcart.shop', 
         'https://www.thefreshcart.shop'
     ],
@@ -20,7 +24,7 @@ app.use(express.json());
 
 mongoose.connect(process.env.MONGO_URI)
 .then(() => {
-    console.log("✅ MongoDB Atlas Connected");
+    console.log("✅ MongoDB Connected");
 })
 .catch((err) => {
     console.log("❌ MongoDB Error:", err);

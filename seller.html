@@ -16,6 +16,24 @@
 
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+        <style>
+            .seller-top-logo {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 18px 16px 8px;
+                background: #0f0817;
+            }
+
+            .seller-top-logo span {
+                color: #fff;
+                font-size: 44px;
+                font-weight: 800;
+                letter-spacing: 0;
+                line-height: 1;
+            }
+        </style>
+
 <script>
     const isLoggedIn = localStorage.getItem("userToken");
     if (!isLoggedIn) {
@@ -25,6 +43,10 @@
     </head>
 
     <body>
+
+        <div class="seller-top-logo">
+            <span>FreshCart</span>
+        </div>
 
         <!-- HEADER -->
         <section id="header">
@@ -51,7 +73,7 @@
                     </li>
 
                     <li>
-                     <a href="#" onclick="logoutUser()">Logout</a>
+                     <a href="javascript:void(0)" onclick="logoutUser()">Logout</a>
                     </li>
                 </ul>
             </div>
@@ -64,7 +86,7 @@
                 class="about-header"
                 style="background-image: url('img/about/banner.png');">
 
-            <h2>#seller-dashboard</h2>
+            <h2>Seller Dashboard</h2>
 
             <p>
                 Manage your stocks and monitor price trends!
@@ -121,7 +143,7 @@
                         <!-- PRODUCT NAME -->
                             <input type="text"
                                 id="pName"
-                                placeholder="Product Name (e.g., Gaming Mouse)"
+                                placeholder="Product Name (e.g., Everyday Tote Bag)"
                                 required
                                 style="
                                         padding: 12px;
@@ -146,12 +168,14 @@
        ">
 
 <datalist id="categoryList">
-    <option value="Mouse">
-    <option value="Keyboard">
-    <option value="Monitor">
-    <option value="GPU">
-    <option value="PC Case">
-    <option value="Mouse Pad">
+    <option value="Fashion">
+    <option value="Electronics">
+    <option value="Home">
+    <option value="Beauty">
+    <option value="Sports">
+    <option value="Books">
+    <option value="Groceries">
+    <option value="Toys">
 </datalist>
 
 
