@@ -1,5 +1,5 @@
 let isLoginMode = true;
-const API_BASE = "http://localhost:5000/api";
+const API_BASE = "https://freshcart-90sw.onrender.com/api";
 
 // 1. SHOW FORM
 window.showAuthForm = function(role) {

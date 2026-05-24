@@ -10,7 +10,7 @@ const defaultProducts = [
     { id: 6, name: "Reusable Self-Care Gift Set", price: 5500, prevPrice: 6200, img: "img/new/1.jpg", brand: "Beauty", stock: 8 }
 ];
 
-const API_BASE = "http://localhost:5000/api";
+const API_BASE = "https://freshcart-90sw.onrender.com/api";
 const currentSeller = JSON.parse(localStorage.getItem('currentUser'));
 
 const sellerKey = currentSeller
