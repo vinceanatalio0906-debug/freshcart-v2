@@ -5,15 +5,23 @@ require("dotenv").config();
 
 const app = express();
 
+const allowedOrigins = [
+    'http://localhost:3000',
+    'http://localhost:5000',
+    'http://127.0.0.1:3000',
+    'http://127.0.0.1:5000',
+    'https://thefreshcart.shop',
+    'https://www.thefreshcart.shop'
+];
+
 app.use(cors({
-    origin: [
-        'http://localhost:3000',
-        'http://localhost:5000',
-        'http://127.0.0.1:3000',
-        'http://127.0.0.1:5000',
-        'https://thefreshcart.shop', 
-        'https://www.thefreshcart.shop'
-    ],
+    origin(origin, callback) {
+        if (!origin || allowedOrigins.includes(origin) || /\.vercel\.app$/.test(origin)) {
+            return callback(null, true);
+        }
+
+        return callback(new Error('Not allowed by CORS'));
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
