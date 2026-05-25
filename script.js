@@ -415,10 +415,10 @@ function renderProductCard(p) {
                 <i class="fas fa-star"></i>
             </div>
             <div style="display:flex; align-items:center; gap:10px;">
-                <h4 style="margin:0; ${priceColor}">â‚±${p.price.toLocaleString()}</h4>
+                <h4 style="margin:0; ${priceColor}">&#8369;${p.price.toLocaleString()}</h4>
                 ${p.price !== p.prevPrice
                     ? `<span style="text-decoration:line-through; color:#999; font-size:12px;">
-                        â‚±${p.prevPrice.toLocaleString()}
+                        &#8369;${p.prevPrice.toLocaleString()}
                        </span>`
                     : ''}
             </div>
@@ -774,7 +774,7 @@ window.processCheckout = async function() {
 
     const checkoutChoice = await Swal.fire({
         title: 'Complete Order?',
-        text: `Total: â‚±${totalSpent.toLocaleString()}`,
+        text: `Total: ₱${totalSpent.toLocaleString()}`,
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#a531ab'
