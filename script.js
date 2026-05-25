@@ -2,12 +2,12 @@
 // 1. DATABASE & STORAGE
 // ==========================================
 const defaultProducts = [
-    { id: 1, name: "Everyday Canvas Tote Bag", price: 588, prevPrice: 750, img: "img/shop/1.jpg", brand: "Fashion", stock: 15 },
-    { id: 2, name: "Wireless Bluetooth Earbuds", price: 400, prevPrice: 400, img: "img/shop/2.jpg", brand: "Electronics", stock: 10 },
-    { id: 3, name: "Ceramic Coffee Mug Set", price: 3299, prevPrice: 3800, img: "img/shop/3.jpg", brand: "Home", stock: 5 },
-    { id: 4, name: "Daily Comfort Running Shoes", price: 400, prevPrice: 550, img: "img/shoes/1.jpg", brand: "Sports", stock: 20 },
-    { id: 5, name: "Minimal Smart Watch", price: 24812, prevPrice: 24812, img: "img/watches/1.jpg", brand: "Electronics", stock: 2 },
-    { id: 6, name: "Reusable Self-Care Gift Set", price: 5500, prevPrice: 6200, img: "img/new/1.jpg", brand: "Beauty", stock: 8 }
+    { id: 1, name: "Everyday Canvas Tote Bag", price: 588, prevPrice: 750, img: "img/shop/1.png", brand: "Fashion", stock: 15 },
+    { id: 2, name: "Wireless Bluetooth Earbuds", price: 400, prevPrice: 400, img: "img/shop/2.png", brand: "Electronics", stock: 10 },
+    { id: 3, name: "Ceramic Coffee Mug Set", price: 3299, prevPrice: 3800, img: "img/shop/3.png", brand: "Home", stock: 5 },
+    { id: 4, name: "Daily Comfort Running Shoes", price: 400, prevPrice: 550, img: "img/shoes/1.png", brand: "Sports", stock: 20 },
+    { id: 5, name: "Minimal Smart Watch", price: 24812, prevPrice: 24812, img: "img/watches/1.png", brand: "Electronics", stock: 2 },
+    { id: 6, name: "Reusable Self-Care Gift Set", price: 5500, prevPrice: 6200, img: "img/new/1.png", brand: "Beauty", stock: 8 }
 ];
 
 const API_BASE = "https://freshcart-90sw.onrender.com/api";
