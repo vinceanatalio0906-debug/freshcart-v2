@@ -26,9 +26,10 @@ router.use(requireAdmin);
 
 router.get("/stats", async (req, res) => {
     try {
-        const [buyers, sellers, products, orders, carts, sales] = await Promise.all([
+        const [buyers, sellers, pendingSellers, products, orders, carts, sales] = await Promise.all([
             User.countDocuments({ role: "buyer" }),
             User.countDocuments({ role: "seller" }),
+            User.countDocuments({ role: "seller", sellerApprovalStatus: "pending" }),
             Product.countDocuments(),
             Order.countDocuments(),
             Cart.countDocuments(),
@@ -40,6 +41,7 @@ router.get("/stats", async (req, res) => {
         res.json({
             buyers,
             sellers,
+            pendingSellers,
             products,
             orders,
             carts,
@@ -54,6 +56,42 @@ router.get("/users", async (req, res) => {
     try {
         const users = await User.find().select("-password").sort({ createdAt: -1 });
         res.json(users);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+router.patch("/users/:id/seller-approval", async (req, res) => {
+    try {
+        const { sellerApprovalStatus } = req.body;
+
+        if (!["pending", "approved", "rejected"].includes(sellerApprovalStatus)) {
+            return res.status(400).json({ message: "Invalid seller approval status." });
+        }
+
+        const user = await User.findById(req.params.id);
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found." });
+        }
+
+        if (user.role !== "seller") {
+            return res.status(400).json({ message: "Only seller accounts can be approved or rejected." });
+        }
+
+        user.sellerApprovalStatus = sellerApprovalStatus;
+        await user.save();
+
+        res.json({
+            _id: user._id,
+            email: user.email,
+            role: user.role,
+            name: user.name,
+            storeName: user.storeName,
+            sellerApprovalStatus: user.sellerApprovalStatus,
+            createdAt: user.createdAt,
+            updatedAt: user.updatedAt
+        });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

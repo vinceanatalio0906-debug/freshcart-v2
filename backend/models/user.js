@@ -22,6 +22,11 @@ const userSchema = new mongoose.Schema({
     storeName: {
         type: String,
         trim: true
+    },
+    sellerApprovalStatus: {
+        type: String,
+        enum: ["pending", "approved", "rejected"],
+        default: "approved"
     }
 }, { timestamps: true });
 

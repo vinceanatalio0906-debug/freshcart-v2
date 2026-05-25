@@ -194,7 +194,9 @@ document.getElementById('authForm').addEventListener('submit', async (e) => {
             Swal.fire({
                 icon: 'success',
                 title: 'Account Created!',
-                text: 'You can now login with your account.',
+                text: role === 'seller'
+                    ? 'Your seller account is waiting for admin approval.'
+                    : 'You can now login with your account.',
                 confirmButtonColor: '#a531ab'
             }).then(() => {
                 toggleMode();

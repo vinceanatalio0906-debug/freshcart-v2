@@ -50,7 +50,8 @@ router.post("/signup", async (req, res) => {
             password,
             role,
             name: role === "buyer" ? name.trim() : undefined,
-            storeName: role === "seller" ? storeName.trim() : undefined
+            storeName: role === "seller" ? storeName.trim() : undefined,
+            sellerApprovalStatus: role === "seller" ? "pending" : "approved"
         });
 
         res.json({
@@ -76,6 +77,14 @@ router.post("/login", async (req, res) => {
         if (user.role !== "admin" && user.role !== role) {
             return res.status(400).json({
                 message: `This account is registered as ${user.role}.`
+            });
+        }
+
+        if (user.role === "seller" && (user.sellerApprovalStatus || "approved") !== "approved") {
+            return res.status(403).json({
+                message: user.sellerApprovalStatus === "rejected"
+                    ? "Your seller account was rejected. Please contact FreshCart support."
+                    : "Your seller account is still waiting for admin approval."
             });
         }
 

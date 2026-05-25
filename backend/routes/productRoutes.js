@@ -26,6 +26,10 @@ router.post("/", async (req, res) => {
             return res.status(403).json({ message: "Seller account not found." });
         }
 
+        if ((seller.sellerApprovalStatus || "approved") !== "approved") {
+            return res.status(403).json({ message: "Your seller account is still waiting for admin approval." });
+        }
+
         const product = await Product.create({
             name,
             brand,
