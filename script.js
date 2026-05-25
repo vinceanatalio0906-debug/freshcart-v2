@@ -362,6 +362,20 @@ window.searchProduct = function() {
 // 6. ADD TO CART
 // ==========================================
 window.addToCart = async function(productId) {
+    if (!currentSeller || !localStorage.getItem("userToken")) {
+        return Swal.fire({
+            icon: 'info',
+            title: 'Login Required',
+            text: 'Please log in before adding items to your cart.',
+            confirmButtonText: 'Login',
+            confirmButtonColor: '#a531ab'
+        }).then(result => {
+            if (result.isConfirmed) {
+                window.location.href = 'login.html';
+            }
+        });
+    }
+
     let cart = JSON.parse(localStorage.getItem('freshCart')) || [];
 
     const product = getAllProducts().find(p => p.id == productId);
@@ -584,6 +598,20 @@ function renderBudget() {
 // 10. CHECKOUT
 // ==========================================
 window.processCheckout = async function() {
+    if (!currentSeller || !localStorage.getItem("userToken")) {
+        return Swal.fire({
+            icon: 'info',
+            title: 'Login Required',
+            text: 'Please log in before checkout.',
+            confirmButtonText: 'Login',
+            confirmButtonColor: '#a531ab'
+        }).then(result => {
+            if (result.isConfirmed) {
+                window.location.href = 'login.html';
+            }
+        });
+    }
+
     let cart = JSON.parse(localStorage.getItem('freshCart')) || [];
 
     if (cart.length === 0) {
