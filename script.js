@@ -164,6 +164,53 @@ const bar = document.getElementById('bar');
 const close = document.getElementById('close');
 const nav = document.getElementById('navbar');
 
+function renderAuthNavLink() {
+    if (!nav) return;
+
+    const isLoggedIn = Boolean(localStorage.getItem("userToken"));
+    const links = Array.from(nav.querySelectorAll('a'));
+    const authLinks = links.filter(link => {
+        const text = link.textContent.trim().toLowerCase();
+        const href = link.getAttribute('href') || '';
+
+        return text === 'logout' || text === 'sign in' || href === 'login.html';
+    });
+
+    authLinks.forEach((link, index) => {
+        const listItem = link.closest('li');
+
+        if (index > 0 && listItem) {
+            listItem.remove();
+        }
+    });
+
+    let authLink = authLinks[0];
+    let authItem = authLink?.closest('li');
+
+    if (!authLink || !authItem || !nav.contains(authItem)) {
+        authItem = document.createElement('li');
+        authItem.className = 'auth-nav-item';
+        authLink = document.createElement('a');
+        authItem.appendChild(authLink);
+
+        const bagItem = document.getElementById('lg-bag');
+        const closeLink = document.getElementById('close');
+
+        nav.insertBefore(authItem, bagItem || closeLink || null);
+    }
+
+    authItem.classList.add('auth-nav-item');
+    authLink.classList.toggle('logout-btn', isLoggedIn);
+    authLink.textContent = isLoggedIn ? 'Logout' : 'Sign In';
+    authLink.href = isLoggedIn ? 'javascript:void(0)' : 'login.html';
+    authLink.onclick = isLoggedIn
+        ? event => {
+            event.preventDefault();
+            window.logoutUser();
+        }
+        : null;
+}
+
 if (bar) {
     bar.addEventListener('click', () => {
         nav.classList.add('active');
@@ -1290,7 +1337,7 @@ function renderSellers() {
     container.innerHTML = marketplaceSellers.map(seller => `
         <div class="pro" style="min-height:190px;">
             <div class="des" style="padding:20px;">
-                <span>${seller.sellerStatus === "upcoming" ? "Upcoming seller" : "Active seller"}</span>
+                <span>Registered seller</span>
                 <h5>${seller.storeName}</h5>
                 <p style="color:#b8b8b8; font-size:12px; word-break:break-word;">${seller.email}</p>
                 <h4>${seller.productCount} product${seller.productCount === 1 ? "" : "s"}</h4>
@@ -1303,6 +1350,7 @@ function renderSellers() {
 // ==========================================
 document.addEventListener('DOMContentLoaded', async () => {
     await loadMarketplaceData();
+    renderAuthNavLink();
     renderShop();
     renderInventory();
     renderSales();
