@@ -22,11 +22,6 @@ const userSchema = new mongoose.Schema({
     storeName: {
         type: String,
         trim: true
-    },
-    sellerStatus: {
-        type: String,
-        enum: ["active", "upcoming"],
-        default: "active"
     }
 }, { timestamps: true });
 

@@ -217,7 +217,6 @@
                             <th>Email</th>
                             <th>Role</th>
                             <th>Name / Store</th>
-                            <th>Seller Status</th>
                             <th>Created</th>
                             <th>Actions</th>
                         </tr>
@@ -358,14 +357,6 @@
                     <td>${user.email}</td>
                     <td><span class="pill">${user.role}</span></td>
                     <td>${user.storeName || user.name || "-"}</td>
-                    <td>
-                        ${user.role === "seller" ? `
-                            <select onchange="updateSellerStatus('${user._id}', this.value)">
-                                <option value="active" ${user.sellerStatus === "active" ? "selected" : ""}>active</option>
-                                <option value="upcoming" ${user.sellerStatus === "upcoming" ? "selected" : ""}>upcoming</option>
-                            </select>
-                        ` : "-"}
-                    </td>
                     <td>${formatDate(user.createdAt)}</td>
                     <td>
                         ${user.role !== "admin" ? `
@@ -404,18 +395,6 @@
                     <td>${formatDate(order.createdAt)}</td>
                 </tr>
             `).join("");
-        }
-
-        async function updateSellerStatus(id, sellerStatus) {
-            try {
-                await requestAdmin(`/users/${id}/seller-status`, {
-                    method: "PATCH",
-                    body: JSON.stringify({ sellerStatus })
-                });
-                await loadDashboard();
-            } catch (error) {
-                Swal.fire("Error", error.message, "error");
-            }
         }
 
         async function deleteUser(id) {

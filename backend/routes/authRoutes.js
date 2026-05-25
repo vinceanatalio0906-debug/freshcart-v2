@@ -16,7 +16,7 @@ function getPasswordIssues(password = "") {
 
 router.post("/signup", async (req, res) => {
     try {
-        const { password, role, name, storeName, sellerStatus } = req.body;
+        const { password, role, name, storeName } = req.body;
         const email = req.body.email?.trim().toLowerCase();
 
         if (!["buyer", "seller"].includes(role)) {
@@ -50,8 +50,7 @@ router.post("/signup", async (req, res) => {
             password,
             role,
             name: role === "buyer" ? name.trim() : undefined,
-            storeName: role === "seller" ? storeName.trim() : undefined,
-            sellerStatus: role === "seller" ? (sellerStatus || "active") : undefined
+            storeName: role === "seller" ? storeName.trim() : undefined
         });
 
         res.json({

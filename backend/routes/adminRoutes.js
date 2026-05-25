@@ -59,30 +59,6 @@ router.get("/users", async (req, res) => {
     }
 });
 
-router.patch("/users/:id/seller-status", async (req, res) => {
-    try {
-        const { sellerStatus } = req.body;
-
-        if (!["active", "upcoming"].includes(sellerStatus)) {
-            return res.status(400).json({ message: "Invalid seller status." });
-        }
-
-        const user = await User.findByIdAndUpdate(
-            req.params.id,
-            { sellerStatus },
-            { new: true }
-        ).select("-password");
-
-        if (!user) {
-            return res.status(404).json({ message: "User not found." });
-        }
-
-        res.json(user);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-});
-
 router.delete("/users/:id", async (req, res) => {
     try {
         const user = await User.findById(req.params.id);

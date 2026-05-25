@@ -130,7 +130,6 @@ document.getElementById('authForm').addEventListener('submit', async (e) => {
     const role = document.getElementById('selectedRole').value;
     const name = document.getElementById('buyerName')?.value.trim();
     const storeName = document.getElementById('storeName')?.value.trim();
-    const sellerStatus = document.getElementById('sellerStatus')?.value || 'active';
 
     if (!isLoginMode) {
         const passwordIssues = getPasswordIssues(password);
@@ -160,8 +159,7 @@ document.getElementById('authForm').addEventListener('submit', async (e) => {
                 password,
                 role,
                 name,
-                storeName,
-                sellerStatus
+                storeName
             })
         });
 
