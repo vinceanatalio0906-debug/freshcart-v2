@@ -22,6 +22,8 @@ let userBudget = parseFloat(localStorage.getItem('userBudget')) || 0;
 let apiProducts = [];
 let marketplaceSellers = [];
 let marketplaceOrders = [];
+let currentProductPage = 1;
+const productsPerPage = 6;
 
 function normalizeProduct(product) {
     const storeName = product.sellerName || product.storeName || product.sellerStoreName || product.sellerEmail || "FreshCart";
@@ -355,6 +357,149 @@ window.searchProduct = function() {
                 ? ""
                 : "none";
     }
+};
+
+function renderProductCard(p) {
+    let badgeHTML = '';
+    let priceColor = '';
+
+    let stockDisplay = p.stock > 0
+        ? `<span style="color:#28a745; font-size:12px;">Stock: ${p.stock}</span>`
+        : `<span style="color:#ff4d4d; font-size:12px; font-weight:bold;">OUT OF STOCK</span>`;
+
+    if (p.price < p.prevPrice) {
+        badgeHTML = `
+            <span style="
+                position:absolute;
+                background:#28a745;
+                color:white;
+                padding:4px 8px;
+                border-radius:4px;
+                font-size:11px;
+                margin:10px;
+                z-index:1;
+            ">PRICE DROP</span>`;
+    } else if (p.price > p.prevPrice) {
+        badgeHTML = `
+            <span style="
+                position:absolute;
+                background:#ff4d4d;
+                color:white;
+                padding:4px 8px;
+                border-radius:4px;
+                font-size:11px;
+                margin:10px;
+                z-index:1;
+            ">PRICE UP</span>`;
+
+        priceColor = 'color:#ff4d4d;';
+    }
+
+    const productId = JSON.stringify(p.id);
+
+    return `
+    <div class="pro" style="${p.stock <= 0 ? 'opacity:0.6;' : ''}">
+        ${badgeHTML}
+        <img src="${p.img}" alt="" onclick="window.location.href='sproduct.html?id=${encodeURIComponent(p.id)}'">
+        <div class="des">
+            <span>${p.brand}</span>
+            <h5>${p.name}</h5>
+            <p style="color:#b8b8b8; font-size:12px; margin:4px 0;">
+                Store: ${p.storeName || p.sellerName || "FreshCart"}
+            </p>
+            <div class="star">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px;">
+                <h4 style="margin:0; ${priceColor}">â‚±${p.price.toLocaleString()}</h4>
+                ${p.price !== p.prevPrice
+                    ? `<span style="text-decoration:line-through; color:#999; font-size:12px;">
+                        â‚±${p.prevPrice.toLocaleString()}
+                       </span>`
+                    : ''}
+            </div>
+            ${stockDisplay}
+        </div>
+        <a href="javascript:void(0)" onclick='addToCart(${productId})'>
+            <i class="fa-solid fa-cart-shopping cart"></i>
+        </a>
+    </div>`;
+}
+
+function getFilteredShopProducts() {
+    const input = document.getElementById('searchInput')?.value.toUpperCase() || "";
+    const selectedCategory = document.getElementById('categorySelect')?.value || "All";
+
+    return getAllProducts().filter(product => {
+        const name = String(product.name || "").toUpperCase();
+        const category = product.brand || "";
+
+        return name.includes(input) &&
+            (selectedCategory === "All" || category === selectedCategory);
+    });
+}
+
+function renderShopPagination(totalPages) {
+    const pagination = document.getElementById('pagination');
+
+    if (!pagination) return;
+
+    if (totalPages <= 1) {
+        pagination.innerHTML = '';
+        return;
+    }
+
+    const pageLinks = Array.from({ length: totalPages }, (_, index) => {
+        const page = index + 1;
+        return `<a href="javascript:void(0)" class="${page === currentProductPage ? 'active' : ''}" onclick="goToProductPage(${page})">${page}</a>`;
+    }).join('');
+
+    const nextPage = currentProductPage === totalPages ? 1 : currentProductPage + 1;
+
+    pagination.innerHTML = `
+        ${pageLinks}
+        <a href="javascript:void(0)" onclick="goToProductPage(${nextPage})">
+            <i class="fa-solid fa-arrow-right-long"></i>
+        </a>
+    `;
+}
+
+function renderShop() {
+    const shopContainers = document.querySelectorAll('#product-container');
+
+    if (shopContainers.length === 0) return;
+
+    const filteredProducts = getFilteredShopProducts();
+    const totalPages = Math.max(1, Math.ceil(filteredProducts.length / productsPerPage));
+
+    if (currentProductPage > totalPages) currentProductPage = totalPages;
+
+    const startIndex = (currentProductPage - 1) * productsPerPage;
+    const visibleProducts = filteredProducts.slice(startIndex, startIndex + productsPerPage);
+    const productHTML = visibleProducts.length
+        ? visibleProducts.map(renderProductCard).join('')
+        : `<p style="color: #fff; text-align: center; width: 100%;">No products found.</p>`;
+
+    shopContainers.forEach(container => {
+        container.innerHTML = productHTML;
+    });
+
+    renderShopPagination(totalPages);
+}
+
+window.goToProductPage = function(page) {
+    currentProductPage = page;
+    renderShop();
+    document.getElementById('product-container')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
+
+window.searchProduct = function() {
+    currentProductPage = 1;
+    renderShop();
 };
 
 
