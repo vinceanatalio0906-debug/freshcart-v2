@@ -1,5 +1,7 @@
 let isLoginMode = true;
-const API_BASE = "https://freshcart-90sw.onrender.com/api";
+const API_BASE = (!window.location.hostname || window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
+    ? "http://localhost:5000/api"
+    : "https://freshcart-90sw.onrender.com/api";
 
 // 1. SHOW FORM
 window.showAuthForm = function(role) {
@@ -178,11 +180,16 @@ document.getElementById('authForm').addEventListener('submit', async (e) => {
             Swal.fire({
                 icon: 'success',
                 title: 'Login Successful!',
-                text: `Welcome, ${role}!`,
+                text: `Welcome, ${data.user.role}!`,
                 timer: 1500,
                 showConfirmButton: false
             }).then(() => {
-                window.location.href = (role === 'seller') ? 'seller.html' : 'index.html';
+                if (data.user.role === 'admin') {
+                    window.location.href = 'admin.html';
+                    return;
+                }
+
+                window.location.href = (data.user.role === 'seller') ? 'seller.html' : 'index.html';
             });
 
         } else {

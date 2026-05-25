@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreshCart - Admin Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+            background: #0f0817;
+            color: #fff;
+        }
+
+        .admin-shell {
+            width: min(1180px, calc(100% - 32px));
+            margin: 0 auto;
+            padding: 28px 0 60px;
+        }
+
+        .admin-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 18px 0 28px;
+        }
+
+        .admin-title h1 {
+            margin: 0;
+            font-size: 32px;
+            line-height: 1.1;
+        }
+
+        .admin-title p {
+            margin: 8px 0 0;
+            color: #c9b8d6;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .admin-button {
+            border: 0;
+            border-radius: 8px;
+            padding: 11px 14px;
+            color: #fff;
+            background: #a531ab;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .admin-button.secondary {
+            background: #2d1b4d;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(6, minmax(140px, 1fr));
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card,
+        .admin-panel {
+            background: #1a1129;
+            border: 1px solid #3d2b5d;
+            border-radius: 8px;
+        }
+
+        .stat-card {
+            padding: 18px;
+        }
+
+        .stat-card span {
+            display: block;
+            color: #c9b8d6;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .stat-card strong {
+            font-size: 26px;
+        }
+
+        .admin-panel {
+            margin-bottom: 22px;
+            overflow: hidden;
+        }
+
+        .panel-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 18px;
+            border-bottom: 1px solid #3d2b5d;
+        }
+
+        .panel-heading h2 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 760px;
+        }
+
+        th,
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #2d1b4d;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        th {
+            color: #c9b8d6;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        td {
+            color: #f5effa;
+            font-size: 14px;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            border-radius: 999px;
+            padding: 5px 9px;
+            background: #2d1b4d;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .danger {
+            background: #8a1f37;
+        }
+
+        .tiny-button {
+            border: 0;
+            border-radius: 6px;
+            padding: 8px 10px;
+            color: #fff;
+            background: #a531ab;
+            cursor: pointer;
+            font-weight: 700;
+            margin-right: 6px;
+        }
+
+        .tiny-button.danger {
+            background: #8a1f37;
+        }
+
+        select {
+            background: #0f0817;
+            border: 1px solid #3d2b5d;
+            border-radius: 6px;
+            color: #fff;
+            padding: 8px;
+        }
+
+        @media (max-width: 980px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, minmax(140px, 1fr));
+            }
+
+            .admin-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="admin-shell">
+        <header class="admin-header">
+            <div class="admin-title">
+                <h1>FreshCart Admin</h1>
+                <p id="adminEmail"></p>
+            </div>
+            <div class="admin-actions">
+                <button class="admin-button secondary" onclick="loadDashboard()">
+                    <i class="fa-solid fa-rotate"></i>
+                    Refresh
+                </button>
+                <button class="admin-button" onclick="logoutAdmin()">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    Logout
+                </button>
+            </div>
+        </header>
+
+        <section class="stats-grid" id="statsGrid"></section>
+
+        <section class="admin-panel">
+            <div class="panel-heading">
+                <h2>Users</h2>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Name / Store</th>
+                            <th>Seller Status</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTable"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="admin-panel">
+            <div class="panel-heading">
+                <h2>Products</h2>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Brand</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Seller</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productsTable"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="admin-panel">
+            <div class="panel-heading">
+                <h2>Orders</h2>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Buyer</th>
+                            <th>Items</th>
+                            <th>Total</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTable"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const API_BASE = (!window.location.hostname || window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
+            ? "http://localhost:5000/api"
+            : "https://freshcart-90sw.onrender.com/api";
+        const currentUser = JSON.parse(localStorage.getItem("currentUser") || "null");
+
+        if (!currentUser || currentUser.role !== "admin") {
+            window.location.replace("login.html");
+        }
+
+        const adminHeaders = {
+            "Content-Type": "application/json",
+            "x-user-email": currentUser?.email || ""
+        };
+
+        document.getElementById("adminEmail").textContent = currentUser?.email || "";
+
+        function peso(value) {
+            return `PHP ${Number(value || 0).toLocaleString("en-PH", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        }
+
+        function formatDate(value) {
+            if (!value) return "-";
+            return new Date(value).toLocaleDateString("en-PH", {
+                year: "numeric",
+                month: "short",
+                day: "numeric"
+            });
+        }
+
+        async function requestAdmin(path, options = {}) {
+            const response = await fetch(`${API_BASE}/admin${path}`, {
+                ...options,
+                headers: {
+                    ...adminHeaders,
+                    ...(options.headers || {})
+                }
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || "Admin request failed.");
+            }
+
+            return data;
+        }
+
+        async function loadDashboard() {
+            try {
+                const [stats, users, products, orders] = await Promise.all([
+                    requestAdmin("/stats"),
+                    requestAdmin("/users"),
+                    requestAdmin("/products"),
+                    requestAdmin("/orders")
+                ]);
+
+                renderStats(stats);
+                renderUsers(users);
+                renderProducts(products);
+                renderOrders(orders);
+            } catch (error) {
+                Swal.fire("Error", error.message, "error");
+            }
+        }
+
+        function renderStats(stats) {
+            const cards = [
+                ["Buyers", stats.buyers],
+                ["Sellers", stats.sellers],
+                ["Products", stats.products],
+                ["Orders", stats.orders],
+                ["Carts", stats.carts],
+                ["Total Sales", peso(stats.totalSales)]
+            ];
+
+            document.getElementById("statsGrid").innerHTML = cards.map(([label, value]) => `
+                <div class="stat-card">
+                    <span>${label}</span>
+                    <strong>${value}</strong>
+                </div>
+            `).join("");
+        }
+
+        function renderUsers(users) {
+            document.getElementById("usersTable").innerHTML = users.map(user => `
+                <tr>
+                    <td>${user.email}</td>
+                    <td><span class="pill">${user.role}</span></td>
+                    <td>${user.storeName || user.name || "-"}</td>
+                    <td>
+                        ${user.role === "seller" ? `
+                            <select onchange="updateSellerStatus('${user._id}', this.value)">
+                                <option value="active" ${user.sellerStatus === "active" ? "selected" : ""}>active</option>
+                                <option value="upcoming" ${user.sellerStatus === "upcoming" ? "selected" : ""}>upcoming</option>
+                            </select>
+                        ` : "-"}
+                    </td>
+                    <td>${formatDate(user.createdAt)}</td>
+                    <td>
+                        ${user.role !== "admin" ? `
+                            <button class="tiny-button danger" onclick="deleteUser('${user._id}')">
+                                Delete
+                            </button>
+                        ` : `<span class="pill">Protected</span>`}
+                    </td>
+                </tr>
+            `).join("");
+        }
+
+        function renderProducts(products) {
+            document.getElementById("productsTable").innerHTML = products.map(product => `
+                <tr>
+                    <td>${product.name}</td>
+                    <td>${product.brand}</td>
+                    <td>${peso(product.price)}</td>
+                    <td>${product.stock}</td>
+                    <td>${product.sellerName || product.sellerEmail}</td>
+                    <td>
+                        <button class="tiny-button danger" onclick="deleteProduct('${product._id}')">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            `).join("");
+        }
+
+        function renderOrders(orders) {
+            document.getElementById("ordersTable").innerHTML = orders.map(order => `
+                <tr>
+                    <td>${order.buyerEmail}</td>
+                    <td>${(order.items || []).map(item => `${item.quantity}x ${item.productName}`).join("<br>")}</td>
+                    <td>${peso(order.totalAmount)}</td>
+                    <td>${formatDate(order.createdAt)}</td>
+                </tr>
+            `).join("");
+        }
+
+        async function updateSellerStatus(id, sellerStatus) {
+            try {
+                await requestAdmin(`/users/${id}/seller-status`, {
+                    method: "PATCH",
+                    body: JSON.stringify({ sellerStatus })
+                });
+                await loadDashboard();
+            } catch (error) {
+                Swal.fire("Error", error.message, "error");
+            }
+        }
+
+        async function deleteUser(id) {
+            const result = await Swal.fire({
+                title: "Delete this user?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Delete",
+                confirmButtonColor: "#8a1f37"
+            });
+
+            if (!result.isConfirmed) return;
+
+            try {
+                await requestAdmin(`/users/${id}`, { method: "DELETE" });
+                await loadDashboard();
+            } catch (error) {
+                Swal.fire("Error", error.message, "error");
+            }
+        }
+
+        async function deleteProduct(id) {
+            const result = await Swal.fire({
+                title: "Delete this product?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Delete",
+                confirmButtonColor: "#8a1f37"
+            });
+
+            if (!result.isConfirmed) return;
+
+            try {
+                await requestAdmin(`/products/${id}`, { method: "DELETE" });
+                await loadDashboard();
+            } catch (error) {
+                Swal.fire("Error", error.message, "error");
+            }
+        }
+
+        function logoutAdmin() {
+            localStorage.removeItem("userToken");
+            localStorage.removeItem("currentUser");
+            window.location.href = "login.html";
+        }
+
+        loadDashboard();
+    </script>
+</body>
+</html>

@@ -68,18 +68,16 @@ router.post("/login", async (req, res) => {
         const { password, role } = req.body;
         const email = req.body.email?.trim().toLowerCase();
 
-        const user = await User.findOne({ email, password, role });
+        const user = await User.findOne({ email, password });
 
         if (!user) {
-            const matchingCredentials = await User.findOne({ email, password });
-
-            if (matchingCredentials) {
-                return res.status(400).json({
-                    message: `This account is registered as ${matchingCredentials.role}.`
-                });
-            }
-
             return res.status(400).json({ message: "Invalid email, password, or role!" });
+        }
+
+        if (user.role !== "admin" && user.role !== role) {
+            return res.status(400).json({
+                message: `This account is registered as ${user.role}.`
+            });
         }
 
         res.json({
